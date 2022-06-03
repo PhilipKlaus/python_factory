@@ -4,6 +4,7 @@ from factory import make, no_make, InstantiationError, factory
 
 
 class Car:
+    """My fast car class"""
 
     @no_make
     def __init__(self, key: any, color: str):
@@ -25,6 +26,7 @@ class Car:
 
 @factory
 class Cycle:
+    """My fast cycle class"""
 
     def __init__(self, key: any, color: str):
         self.color = color
@@ -87,3 +89,8 @@ def test_instantiate_cycle_without_factory_method_fails():
         Cycle(None, "purple")
     with pytest.raises(InstantiationError):
         Cycle(object(), "purple")
+
+
+def test_correct_class_wrapping_for_cycles():
+    assert Cycle.__name__ == "Cycle"
+    assert Cycle.__doc__ == "My fast cycle class"
