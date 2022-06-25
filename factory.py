@@ -17,11 +17,11 @@ def no_make(init_fn):
     """
 
     @wraps(init_fn)
-    def _no_make(self, secret, *args, **kwargs):
-        stored_secret = getattr(self, "__factory_key", None)
-        if not stored_secret or secret is not stored_secret:
+    def _no_make(self, key, *args, **kwargs):
+        stored_key = getattr(self, "__factory_key", None)
+        if not stored_key or key is not stored_key:
             raise InstantiationError(f"Not allowed to instantiate {type(self).__name__} directly")
-        init_fn(self, secret, *args, **kwargs)
+        init_fn(self, *args, **kwargs)
 
     return _no_make
 
@@ -35,11 +35,11 @@ def make(fn):
 
     @wraps(fn)
     def _make(cls, *args, **kwargs):
-        secret = getattr(cls, "__factory_key", None)
-        if not secret:
-            secret = object()
-            setattr(cls, "__factory_key", secret)
-        return fn(cls, secret, *args, **kwargs)
+        factory_key = getattr(cls, "__factory_key", None)
+        if not factory_key:
+            factory_key = object()
+            setattr(cls, "__factory_key", factory_key)
+        return fn(cls, factory_key, *args, **kwargs)
 
     return _make
 
@@ -53,11 +53,11 @@ def factory(cls):
     """
     old_init = getattr(cls, "__init__")
 
-    def patch_init(self, secret, *_args, **_kwargs):
-        stored_secret = getattr(self, "__factory_key", None)
-        if not stored_secret or secret is not stored_secret:
+    def patch_init(self, factory_key, *_args, **_kwargs):
+        stored_key = getattr(self, "__factory_key", None)
+        if not stored_key or factory_key is not stored_key:
             raise InstantiationError(f"Not allowed to instantiate {type(self).__name__} directly")
-        old_init(self, secret, *_args, **_kwargs)
+        old_init(self, *_args, **_kwargs)
 
     setattr(cls, "__init__", patch_init)
     return cls

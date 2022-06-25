@@ -7,9 +7,9 @@ class Car:
     """My fast car class"""
 
     @no_make
-    def __init__(self, key: any, color: str):
+    def __init__(self, color: str):
         self.color = color
-        print(f"Created with color: {color} and key: {key}")
+        print(f"Created with color: {color}")
 
     @classmethod
     @make
@@ -28,9 +28,9 @@ class Car:
 class Cycle:
     """My fast cycle class"""
 
-    def __init__(self, key: any, color: str):
+    def __init__(self, color: str):
         self.color = color
-        print(f"Created Cycle with color: {color} and key: {key}")
+        print(f"Created Cycle with color: {color}")
 
     @classmethod
     @make
